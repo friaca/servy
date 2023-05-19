@@ -2,12 +2,27 @@ defmodule Servy.Handler do
   def handle(request) do
     request
     |> parse
+    |> rewrite_path
     |> log
     |> route
+    |> track
     |> format_response
   end
 
   def log(conv), do: IO.inspect(conv)
+
+  def rewrite_path(%{path: "/wildlife"} = conv) do
+    %{conv | path: "/wildthings" }
+  end
+
+  def rewrite_path(conv), do: conv
+
+  def track(%{status: 404, path: path} = conv) do
+    IO.puts("Warning: #{path} is on the loose!")
+    conv
+  end
+
+  def track(conv), do: conv
 
   def parse(request) do
     [method, path, _] =
@@ -19,23 +34,23 @@ defmodule Servy.Handler do
     %{ method: method, path: path, resp_body: "", status: nil }
   end
 
-  def route(conv) do
-    route(conv, conv.method, conv.path)
-  end
-
-  def route(conv, "GET", "/wildthings") do
+  def route(%{method: "GET", path: "/wildthings"} = conv) do
     %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
   end
 
-  def route(conv, "GET", "/bears") do
+  def route(%{method: "GET", path: "/bears"} = conv) do
     %{conv | status: 200, resp_body: "Teddy, Smokey, Paddington"}
   end
 
-  def route(conv, "GET", "/bears/" <> id) do
+  def route(%{method: "GET", path: "/bears/" <> id} = conv) do
     %{conv | status: 200, resp_body: "Bear #{id}"}
   end
 
-  def route(conv, _method, path) do
+  def route(%{method: "DELETE", path: "/bears/" <> id} = conv) do
+    %{conv | status: 200, resp_body: "Bear #{id} deleted!"}
+  end
+
+  def route(%{path: path} = conv) do
     %{conv | status: 404, resp_body: "No #{path} here!"}
   end
 
@@ -96,6 +111,17 @@ IO.puts(response)
 
 request = """
 GET /bears/1 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts(response)
+
+request = """
+GET /wildlife HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
