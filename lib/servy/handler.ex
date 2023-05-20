@@ -1,4 +1,6 @@
 defmodule Servy.Handler do
+  import Logger
+
   def handle(request) do
     request
     |> parse
@@ -31,7 +33,17 @@ defmodule Servy.Handler do
   def rewrite_path_captures(conv, nil), do: conv
 
   def track(%{status: 404, path: path} = conv) do
-    IO.puts("Warning: #{path} is on the loose!")
+    warn("Warning: #{path} is on the loose!")
+    conv
+  end
+
+  def track(%{status: 200, path: path} = conv) do
+    info("#{path} completed successfully")
+    conv
+  end
+
+  def track(%{status: 500, path: path} = conv) do
+    error("#{path} crashed!")
     conv
   end
 
