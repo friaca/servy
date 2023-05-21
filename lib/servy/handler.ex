@@ -3,10 +3,11 @@ defmodule Servy.Handler do
   Handles HTTP requests.
   """
 
-  @pages_path Path.expand("../../pages", __DIR__)
+  @pages_path Path.expand("pages", File.cwd!)
 
+  import Servy.Parser
+  import Servy.FileHandler
   import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1, emojify: 1]
-  import Servy.Parser, only: [parse: 1]
 
   @doc """
   Transforms the request into a respons
@@ -21,8 +22,6 @@ defmodule Servy.Handler do
     |> track
     |> format_response
   end
-
-
 
   def route(%{method: "GET", path: "/wildthings"} = conv) do
     %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
@@ -63,18 +62,6 @@ defmodule Servy.Handler do
 
   def route(%{path: path} = conv) do
     %{conv | status: 404, resp_body: "No #{path} here!"}
-  end
-
-  def handle_file({:ok, content}, conv) do
-    %{conv | status: 200, resp_body: content}
-  end
-
-  def handle_file({:error, :enoent}, conv) do
-    %{conv | status: 404, resp_body: "File not found!"}
-  end
-
-  def handle_file({:error, reason}, conv) do
-    %{conv | status: 500, resp_body: "File error: #{reason}"}
   end
 
   def format_response(conv) do
