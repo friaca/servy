@@ -12,7 +12,7 @@ defmodule Servy.Handler do
   alias Servy.Conv
 
   @doc """
-  Transforms the request into a respons
+  Transforms the request into a response
   """
   def handle(request) do
     request
@@ -60,6 +60,10 @@ defmodule Servy.Handler do
     |> Path.join("#{page}.html")
     |> File.read()
     |> handle_file(conv)
+  end
+
+  def route(%Conv{method: "POST", path: "/bears"} = conv) do
+    %{ conv | status: 201, resp_body: "Created a #{conv.params["type"]} a bear named #{conv.params["name"]}!" }
   end
 
   def route(%Conv{path: path} = conv) do
@@ -176,4 +180,19 @@ Accept: */*
 """
 
 response = Servy.Handler.handle(request)
+IO.puts(response)
+
+request = """
+POST /bears HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+name=Baloo&type=Brown
+"""
+
+response = Servy.Handler.handle(request)
+
 IO.puts(response)
