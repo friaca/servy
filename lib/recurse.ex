@@ -16,5 +16,5 @@ defmodule Recurse do
   def triple([]), do: []
 end
 
-#IO.puts Recurse.sum([1, 2, 3, 4, 5])
-IO.puts Recurse.triple([1, 2, 3, 4, 5])
+IO.puts Recurse.sum([1, 2, 3, 4, 5])
+IO.inspect Recurse.triple([1, 2, 3, 4, 5])
