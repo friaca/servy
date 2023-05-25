@@ -22,12 +22,10 @@ defmodule Servy.Parser do
 
   def parse_params(_content_type, _params_string), do: %{}
 
-  def parse_headers([head | tail], headers) do
-    [key, value] = String.split(head, ": ")
-
-    headers = Map.put(headers, key, value)
-    parse_headers(tail, headers)
+  def parse_headers(header_lines, header_map) do
+    Enum.reduce(header_lines, header_map, fn curr, acc ->
+      [key, value] = String.split(curr, ": ")
+      Map.put(acc, key, value)
+    end)
   end
-
-  def parse_headers([], headers), do: headers
 end
