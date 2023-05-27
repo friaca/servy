@@ -23,6 +23,6 @@ defmodule Servy.BearController do
   end
 
   def delete(conv, _params) do
-    %{conv | status: 200, resp_body: "Deleting a bear is forbidden!"}
+    %{conv | status: 403, resp_body: "Deleting a bear is forbidden!"}
   end
 end
