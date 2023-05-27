@@ -7,7 +7,7 @@ defmodule Servy.Handler do
 
   import Servy.Parser
   import Servy.FileHandler
-  import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1, emojify: 1]
+  import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1]
 
   alias Servy.Conv
   alias Servy.BearController
@@ -21,7 +21,6 @@ defmodule Servy.Handler do
     |> rewrite_path
     |> log
     |> route
-    # |> emojify
     |> track
     |> format_response
   end
