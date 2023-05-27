@@ -3,7 +3,12 @@ defmodule Servy.Plugins do
 
   alias Servy.Conv
 
-  def log(%Conv{} = conv), do: IO.inspect(conv)
+  def log(%Conv{} = conv) do
+    if Mix.env == :dev do
+      IO.inspect(conv)
+    end
+    conv
+  end
 
   def emojify(%Conv{status: 200} = conv) do
     %{conv | resp_body: "🎺 #{conv.resp_body} 🎺"}
@@ -24,7 +29,9 @@ defmodule Servy.Plugins do
   def rewrite_path_captures(%Conv{} = conv, nil), do: conv
 
   def track(%Conv{status: 404, path: path} = conv) do
-    warn("Warning: #{path} is on the loose!")
+    if Mix.env != :dev do
+      warn("Warning: #{path} is on the loose!")
+    end
     conv
   end
 
