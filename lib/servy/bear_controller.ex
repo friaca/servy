@@ -3,8 +3,6 @@ defmodule Servy.BearController do
   alias Servy.Bear
   alias Servy.BearView
 
-  @templates_path Path.expand("templates", File.cwd!)
-
   def index(conv) do
     bears =
       Wildthings.list_bears()
