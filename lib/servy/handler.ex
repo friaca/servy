@@ -42,6 +42,10 @@ defmodule Servy.Handler do
     Servy.Api.BearController.index(conv)
   end
 
+  def route(%Conv{method: "POST", path: "/api/bears"} = conv) do
+    Servy.Api.BearController.create(conv)
+  end
+
   def route(%Conv{method: "GET", path: "/bears/new"} = conv) do
     @pages_path
     |> Path.join("form.html")
