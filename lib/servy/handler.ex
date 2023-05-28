@@ -22,6 +22,7 @@ defmodule Servy.Handler do
     |> log
     |> route
     |> track
+    |> put_content_length
     |> format_response
   end
 
@@ -79,11 +80,29 @@ defmodule Servy.Handler do
     %{conv | status: 404, resp_body: "No #{path} here!"}
   end
 
+  def put_resp_content_type(%Conv{} = conv, content_type) do
+    %{ conv | resp_headers: Map.put(conv.resp_headers, "Content-Type", content_type) }
+  end
+
+  def put_content_length(%Conv{} = conv) do
+    %{ conv | resp_headers: Map.put(conv.resp_headers, "Content-Length", byte_size(conv.resp_body)) }
+  end
+
+  def format_response_headers(%Conv{} = conv) do
+    # For some reason, the Content-Type header doesn't get a "default" \r and break tests
+    Enum.map(conv.resp_headers, fn {key, value} ->
+      case key do
+        "Content-Type" -> "#{key}: #{value}\r"
+        _ -> "#{key}: #{value}"
+      end
+
+    end) |> Enum.sort |> Enum.reverse |> Enum.join("\n")
+  end
+
   def format_response(%Conv{} = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}
-    Content-Type: #{conv.resp_content_type}
-    Content-Length: #{byte_size(conv.resp_body)}
+    #{format_response_headers(conv)}
 
     #{conv.resp_body}
     """

@@ -1,7 +1,8 @@
 defmodule HandlerTest do
   use ExUnit.Case
+  doctest Servy.Handler
 
-  import Servy.Handler, only: [handle: 1]
+  import Servy.Handler, only: [handle: 1, format_response_headers: 1]
 
   test "GET /wildthings" do
     request = """
@@ -222,6 +223,24 @@ defmodule HandlerTest do
      {"hibernating":false,"id":8,"name":"Roscoe","type":"Panda"},
      {"hibernating":true,"id":9,"name":"Iceman","type":"Polar"},
      {"hibernating":false,"id":10,"name":"Kenai","type":"Grizzly"}]
+    """
+
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
+
+  test "formats headers correctly" do
+    input = %Servy.Conv{
+      resp_headers: %{
+        "Content-Type" => "application/json",
+        "Content-Length" => "1973"}
+    }
+
+    response = format_response_headers(input)
+
+    expected_response = """
+    Content-Type: application/json
+    Content-Length: 1973
+
     """
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)
