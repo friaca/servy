@@ -1,6 +1,7 @@
 defmodule Servy.Bear do
   alias Servy.Bear
 
+  @derive Jason.Encoder
   defstruct id: nil,
             name: "",
             type: "",
