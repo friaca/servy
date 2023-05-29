@@ -70,10 +70,13 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{method: "GET", path: "/pages/" <> page} = conv) do
-    @pages_path
-    |> Path.join("#{page}.html")
-    |> File.read()
-    |> handle_file(conv)
+    md_file = @pages_path |> Path.join("#{page}.md")
+    html_file = @pages_path |> Path.join("#{page}.html")
+
+    case File.exists?(md_file) do
+      true -> File.read(md_file) |> handle_file(conv) |> markdown_to_html()
+      false -> File.read(html_file) |> handle_file(conv)
+    end
   end
 
   def route(%Conv{method: "POST", path: "/bears"} = conv) do
