@@ -23,7 +23,7 @@ defmodule Servy.HttpServer do
 
     Logger.info("⚡️  Connection accepted!\n")
 
-    serve(client_socket)
+    spawn(fn -> serve(client_socket) end)
     accept_loop(listen_socket)
   end
 
@@ -32,6 +32,8 @@ defmodule Servy.HttpServer do
   sends a response back over the same socket.
   """
   def serve(client_socket) do
+    Logger.info("#{inspect self()}: Working on it!")
+
     client_socket
     |> read_request
     |> Servy.Handler.handle()
