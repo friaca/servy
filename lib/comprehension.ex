@@ -18,7 +18,7 @@ defmodule Comprehension do
   end
 end
 
-deck = Comprehension.generate_cards()
-IO.inspect(deck)
-IO.inspect(Comprehension.get_random_cards(deck, 13))
-IO.inspect(Comprehension.get_four_hands(deck, 13))
+# deck = Comprehension.generate_cards()
+# IO.inspect(deck)
+# IO.inspect(Comprehension.get_random_cards(deck, 13))
+# IO.inspect(Comprehension.get_four_hands(deck, 13))
