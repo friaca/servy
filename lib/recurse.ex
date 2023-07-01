@@ -22,6 +22,6 @@ defmodule Recurse do
   def my_map([], _func), do: []
 end
 
-IO.puts Recurse.sum([1, 2, 3, 4, 5])
-IO.inspect Recurse.triple([1, 2, 3, 4, 5])
-IO.inspect Recurse.my_map([1, 2, 3], fn x -> x * 2 end)
+# IO.puts Recurse.sum([1, 2, 3, 4, 5])
+# IO.inspect Recurse.triple([1, 2, 3, 4, 5])
+# IO.inspect Recurse.my_map([1, 2, 3], fn x -> x * 2 end)
