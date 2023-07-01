@@ -1,5 +1,5 @@
 defmodule Servy.HttpClient do
-  def generate_request do
+  defp generate_request do
     """
     GET /bears HTTP/1.1
     Host: example.com
@@ -9,10 +9,10 @@ defmodule Servy.HttpClient do
     """
   end
 
-  def connect(port) do
+  def send_request(port, req \\ generate_request()) do
     host = 'localhost'
     {:ok, sock} = :gen_tcp.connect(host, port, [:binary, packet: :raw, active: false])
-    :ok = :gen_tcp.send(sock, generate_request())
+    :ok = :gen_tcp.send(sock, req)
     {:ok, response} = :gen_tcp.recv(sock, 0)
     :ok = :gen_tcp.close(sock)
     response
@@ -24,6 +24,6 @@ end
 # spawn(fn -> Servy.HttpServer.start(port) end)
 # -- With named function
 # spawn(Servy.HttpServer, :start, [port])
-# response = Servy.HttpClient.connect(port)
+# response = Servy.HttpClient.send_request(port)
 
 # IO.puts(response)
