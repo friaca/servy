@@ -28,7 +28,7 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{ method: "GET", path: "/sensors" } = conv) do
-    location_task = Task.async(fn -> Servy.Tracker.get_location("bigfoot") end)
+    location_task = Task.async(Servy.Tracker, :get_location, ["bigfoot"])
 
     snapshots =
       ["cam-1", "cam-2", "cam-3"]
