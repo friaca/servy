@@ -4,7 +4,7 @@ defmodule Servy.HttpServer do
   @doc """
   Starts the server on the given `port` of localhost.
   """
-  def start(port) when is_integer(port) and port > 1023 do
+  def start(port \\ 4000) when is_integer(port) and port > 1023 do
     {:ok, listen_socket} =
       :gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
 
