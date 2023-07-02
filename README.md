@@ -1,6 +1,6 @@
 # Servy
 
-Simple HTTP server and some unrelated exercises based on Pragmastic Studio's Elixir & OTP course.
+Simple HTTP server and some unrelated exercises based on Pragmatic Studio's Elixir & OTP course.
 
 ## Running the project
 
