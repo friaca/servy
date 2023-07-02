@@ -4,11 +4,11 @@ Simple HTTP server and some unrelated exercises based on Pragmastic Studio's Eli
 
 ## Running the project
 
-Just clone the project as usual and run 
+Just clone the project as usual and run the following on the project's root directory.
 ```
 mix deps.get
 ```
-on the project's root directory. After that you can do whatever you want.
+After that you can do whatever you want.
 
 To start the server you can run the following on the project's root aswell.
 ```
