@@ -7,6 +7,7 @@ defmodule Servy.Handler do
 
   import Servy.Parser
   import Servy.FileHandler
+  import Servy.View, only: [render: 3]
   import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1]
 
   alias Servy.Conv
@@ -28,7 +29,8 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{ method: "GET", path: "/sensors" } = conv) do
-    location_task = Task.async(Servy.Tracker, :get_location, ["bigfoot"])
+    entity = "bigfoot"
+    location_task = Task.async(Servy.Tracker, :get_location, [entity])
 
     snapshots =
       ["cam-1", "cam-2", "cam-3"]
@@ -37,7 +39,7 @@ defmodule Servy.Handler do
 
     location = Task.await(location_task)
 
-    %{ conv | status: 200, resp_body: inspect { snapshots, location } }
+    render(conv, "sensors.eex", [location: location, name: entity, snapshots: snapshots])
   end
 
   def route(%Conv{ method: "GET", path: "/hibernate/" <> time } = conv) do

@@ -1,0 +1,9 @@
+<h1>The info we have on <%= name %></h1>
+
+<h3>Coordinates</h3>
+<p>Latitude: <%= location.lat %></p>
+<p>Longitude: <%= location.lng %></p>
+
+<%= for snap <- snapshots do %>
+  <p><%= snap %></p>
+<% end %>
