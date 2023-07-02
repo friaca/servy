@@ -1,21 +1,19 @@
 # Servy
 
-**TODO: Add description**
+Simple HTTP server and some unrelated exercises based on Pragmastic Studio's Elixir & OTP course.
 
-## Installation
+## Running the project
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `servy` to your list of dependencies in `mix.exs`:
+Just clone the project as usual and run 
+```
+mix deps.get
+```
+on the project's root directory. After that you can do whatever you want.
 
-```elixir
-def deps do
-  [
-    {:servy, "~> 0.1.0"}
-  ]
-end
+To start the server you can run the following on the project's root aswell.
+```
+iex -S mix
+Servy.HttpServer.start(<port>)
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/servy>.
-
+If you don't specify the server port it will automatically start in port 4000.
