@@ -6,22 +6,9 @@ defmodule HttpServerTest do
     port = 4000
     spawn(Servy.HttpServer, :start, [port])
 
-    request = """
-    GET /wildthings HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
+    {:ok, response} = HTTPoison.get("http://localhost:#{port}/wildthings")
 
-    """
-
-    response = Servy.HttpClient.send_request(port, request)
-
-    assert response == """
-    HTTP/1.1 200 OK
-    Content-Type: text/html
-    Content-Length: 20
-
-    Bears, Lions, Tigers
-    """
+    assert response.status_code == 200
+    assert response.body == "Bears, Lions, Tigers"
   end
 end
