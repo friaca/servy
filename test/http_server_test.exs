@@ -19,19 +19,14 @@ defmodule HttpServerTest do
 
     spawn(Servy.HttpServer, :start, [port])
 
-    for _ <- 1..num_requests do
-      spawn(fn ->
-        {:ok, response} = HTTPoison.get("http://localhost:#{port}/wildthings")
-        send(parent, {:ok, response})
-      end)
+    tasks = for _ <- 1..num_requests do
+      Task.async(HTTPoison, :get, ["http://localhost:#{port}/wildthings"])
     end
 
-    for _ <- 1..num_requests do
-      receive do
-        {:ok, response} ->
-          assert response.status_code == 200
-          assert response.body == "Bears, Lions, Tigers"
-      end
-    end
+    Enum.map(tasks, fn task -> Task.await(task) end)
+    |> Enum.map(fn {:ok, response} ->
+      assert response.status_code == 200
+      assert response.body == "Bears, Lions, Tigers"
+    end)
   end
 end
