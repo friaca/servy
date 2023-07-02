@@ -29,4 +29,23 @@ defmodule HttpServerTest do
       assert response.body == "Bears, Lions, Tigers"
     end)
   end
+
+  test "accepts requests in multiple endpoints and returns the responses correctly" do
+    port = 4000
+
+    spawn(Servy.HttpServer, :start, [port])
+
+    urls =
+      ["wildthings", "bears", "bears/1", "wildlife", "api/bears"]
+      |> Enum.map(fn endpoint -> "http://localhost:#{port}/#{endpoint}" end)
+
+    urls
+    |> Enum.map(&Task.async(fn -> HTTPoison.get(&1) end))
+    |> Enum.map(&Task.await/1)
+    |> Enum.map(&assert_successful_response/1)
+  end
+
+  defp assert_successful_response({:ok, response}) do
+    assert response.status_code == 200
+  end
 end
