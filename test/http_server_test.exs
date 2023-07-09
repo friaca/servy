@@ -14,7 +14,6 @@ defmodule HttpServerTest do
 
   test "accepts multiple requests and returns the responses correctly" do
     port = 4000
-    parent = self()
     num_requests = 5
 
     spawn(Servy.HttpServer, :start, [port])
