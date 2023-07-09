@@ -13,6 +13,8 @@ defmodule Servy.Handler do
   alias Servy.Conv
   alias Servy.VideoCam
   alias Servy.BearController
+  alias Servy.PledgeController
+  alias Servy.FourOhFourCounter, as: Counter
 
   @doc """
   Transforms the request into a response
@@ -28,12 +30,16 @@ defmodule Servy.Handler do
     |> format_response
   end
 
+  def route(%Conv{method: "GET", path: "/404-count"} = conv) do
+    %{conv | status: 200, resp_body: inspect(Counter.get_counts()) }
+  end
+
   def route(%Conv{method: "POST", path: "/pledges"} = conv) do
-    Servy.PledgeController.create(conv, conv.params)
+    PledgeController.create(conv, conv.params)
   end
 
   def route(%Conv{method: "GET", path: "/pledges"} = conv) do
-    Servy.PledgeController.index(conv)
+    PledgeController.index(conv)
   end
 
   def route(%Conv{ method: "GET", path: "/sensors" } = conv) do

@@ -2,6 +2,7 @@ defmodule Servy.Plugins do
   import Logger
 
   alias Servy.Conv
+  alias Servy.FourOhFourCounter, as: Counter
 
   def log(%Conv{} = conv) do
     if Mix.env == :dev do
@@ -29,8 +30,9 @@ defmodule Servy.Plugins do
   def rewrite_path_captures(%Conv{} = conv, nil), do: conv
 
   def track(%Conv{status: 404, path: path} = conv) do
-    if Mix.env != :dev do
+    if Mix.env != :test do
       warn("Warning: #{path} is on the loose!")
+      Counter.bump_count(path)
     end
     conv
   end
