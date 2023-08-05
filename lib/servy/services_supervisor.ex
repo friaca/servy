@@ -9,6 +9,7 @@ defmodule Servy.ServicesSupervisor do
   def init(:ok) do
     children = [
       Servy.PledgeServer,
+      Servy.FourOhFourCounter,
       {Servy.SensorServer, 60}
     ]
 

@@ -2,10 +2,8 @@ defmodule Servy.FourOhFourCounter do
 
   @name :four_oh_four_counter
 
-  def start(initial_state \\ %{}) do
-    pid = spawn(__MODULE__, :listen_loop, [initial_state])
-    Process.register(pid, @name)
-    pid
+  def start_link(_arg) do
+    GenServer.start_link(__MODULE__, %{}, name: @name)
   end
 
   def bump_count(route) do
