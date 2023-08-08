@@ -1,9 +1,13 @@
 defmodule Servy.FourOhFourCounter do
-
+  use GenServer
   @name :four_oh_four_counter
 
   def start_link(_arg) do
     GenServer.start_link(__MODULE__, %{}, name: @name)
+  end
+
+  def init(args) do
+    {:ok, args}
   end
 
   def bump_count(route) do
