@@ -25,6 +25,7 @@ defmodule Servy.SensorServer do
   # Server Callbacks
 
   def init(state) do
+    IO.puts("Starting SensorServer with #{state.refresh_interval} min interval")
     initial_state = %{state | sensor_data: run_tasks_to_get_sensor_data()}
     schedule_refresh(:timer.minutes(state.refresh_interval))
 

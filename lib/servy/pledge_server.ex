@@ -37,6 +37,7 @@ defmodule Servy.PledgeServer do
   # Server callbacks
 
   def init(state) do
+    IO.puts("Starting PledgeServer")
     pledges = fetch_recent_pledges_from_service()
     new_state = %{state | pledges: pledges}
     {:ok, new_state}
