@@ -8,7 +8,7 @@ defmodule Servy.HttpServer do
     {:ok, listen_socket} =
       :gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
 
-    Logger.info("\n🎧  Listening for connection requests on port #{port}...\n")
+    Logger.info("\nListening for connection requests on port #{port}...\n")
 
     accept_loop(listen_socket)
   end
@@ -17,11 +17,11 @@ defmodule Servy.HttpServer do
   Accepts client connections on the `listen_socket`.
   """
   def accept_loop(listen_socket) do
-    Logger.info("⌛️  Waiting to accept a client connection...\n")
+    Logger.info("Waiting to accept a client connection...\n")
 
     {:ok, client_socket} = :gen_tcp.accept(listen_socket)
 
-    Logger.info("⚡️  Connection accepted!\n")
+    Logger.info("Connection accepted!\n")
 
     pid = spawn(fn -> serve(client_socket) end)
     :ok = :gen_tcp.controlling_process(client_socket, pid)
@@ -48,7 +48,7 @@ defmodule Servy.HttpServer do
   def read_request(client_socket) do
     {:ok, request} = :gen_tcp.recv(client_socket, 0) # all available bytes
 
-    Logger.info("➡️  Received request:\n")
+    Logger.info("Received request:\n")
     IO.puts request
 
     request
@@ -73,7 +73,7 @@ defmodule Servy.HttpServer do
   def write_response(response, client_socket) do
     :ok = :gen_tcp.send(client_socket, response)
 
-    Logger.info("⬅️  Sent response:\n")
+    Logger.info("Sent response:\n")
     IO.puts response
 
     # Closes the client socket, ending the connection.
