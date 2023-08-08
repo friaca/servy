@@ -26,7 +26,7 @@ defmodule Servy.SensorServer do
 
   def init(state) do
     initial_state = %{state | sensor_data: run_tasks_to_get_sensor_data()}
-    schedule_refresh(state.refresh_interval)
+    schedule_refresh(:timer.minutes(state.refresh_interval))
 
     {:ok, initial_state}
   end
